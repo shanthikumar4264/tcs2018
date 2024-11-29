@@ -45,13 +45,7 @@ def find_matches(blocks_f, blocks_d):
 
     return result_set
 
-def calculate_combinations(idx, current_value, valid_combinations, total_sum):
-   
-    if idx == len(valid_combinations):
-        total_sum[0] += current_value
-        return
-    for option in valid_combinations[idx]:
-        calculate_combinations(idx + 1, current_value * 10 + option, valid_combinations, total_sum)
+
 
 def main():
    
