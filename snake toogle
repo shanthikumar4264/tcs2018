@@ -1,0 +1,74 @@
+def extract_blocks(a, b):
+  
+    blocks_d = []
+    blocks_f = []
+
+    
+    for i in range(0, len(a[0]), 3):
+        blocks_d.append(a[0][i:i+3])
+    
+    for i in range(1, 3):
+        temp = []
+        for j in range(0, len(a[i]), 3):
+            temp.append(a[i][j:j+3])
+        for k in range(len(blocks_d)):
+            blocks_d[k] += temp[k]
+
+  
+    for i in range(0, len(b[0]), 3):
+        blocks_f.append(b[0][i:i+3])
+
+    for i in range(1, 3):
+        temp = []
+        for j in range(0, len(b[i]), 3):
+            temp.append(b[i][j:j+3])
+        for k in range(len(blocks_f)):
+            blocks_f[k] += temp[k]
+
+    return blocks_d, blocks_f
+
+def find_matches(blocks_f, blocks_d):
+   
+    result_set = []
+
+    for block_f in blocks_f:
+        possible_matches = []
+        for idx, block_d in enumerate(blocks_d):
+            mismatch_count = sum(1 for i in range(len(block_f)) if block_f[i] != block_d[i])
+            if mismatch_count <= 1:
+                possible_matches.append(idx)
+
+        if not possible_matches:
+            return []  
+
+        result_set.append(possible_matches)
+
+    return result_set
+
+def calculate_combinations(idx, current_value, valid_combinations, total_sum):
+   
+    if idx == len(valid_combinations):
+        total_sum[0] += current_value
+        return
+    for option in valid_combinations[idx]:
+        calculate_combinations(idx + 1, current_value * 10 + option, valid_combinations, total_sum)
+
+def main():
+   
+    a = [input().strip() for _ in range(3)]
+    b = [input().strip() for _ in range(3)]
+
+    
+    blocks_d, blocks_f = extract_blocks(a, b)
+
+   
+    valid_combinations = find_matches(blocks_f, blocks_d)
+
+    if not valid_combinations:
+        print("Invalid", end='') 
+    else:
+        total_sum = [0]
+        calculate_combinations(0, 0, valid_combinations, total_sum)
+        print(total_sum[0], end='')  
+if __name__ == "__main__":
+    main()
